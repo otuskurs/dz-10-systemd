@@ -1,0 +1,85 @@
+---
+- hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+#1. Написать service, который будет раз в 30 секунд мониторить лог на предмет наличия ключевого слова
+  - name: Создаём файл с конфигурацией для сервиса 
+    ansible.builtin.shell: | 
+      "touch /etc/default/watchlog" |
+      echo "# Configuration file for my watchlog service\n# Place it to /etc/default\n\n# File and word in that file that we will be monit\nWORD=\"ALERT\"\nLOG=/var/log/watchlog.log" >> /etc/default/watchlog
+  - name: Создаём log файл с ключевым словом ALERT
+    ansible.builtin.shell: |
+      "touch /var/log/watchlog.log" |
+      echo "Some say the world will end in fire,\nSome say in ice.\nFrom what I’ve tasted of desire\nALERT\n\nALERT\nI hold with those who favor fire." >> /var/log/watchlog.log
+  - name: Создаём скрипт
+    ansible.builtin.shell: |
+      "touch /opt/watchlog.sh" |
+      echo "#!/bin/bash\n\nWORD=\$1\nLOG=\$2\nDATE=\`date\`\n\nif grep \$WORD \$LOG &> /dev/null;\nthen\nlogger \"\$DATE: I found word, Master!\"\nelse\nexit 0\nfi" >> /opt/watchlog.sh 
+  - name: Делаем файл исполняемым
+    ansible.builtin.command: chmod +x /opt/watchlog.sh
+  - name: Создадим юнит для сервиса
+    ansible.builtin.shell: touch /etc/systemd/system/watchlog.service |
+      echo "[Unit]\nDescription=My watchlog service\n\n[Service]\nType=oneshot\nEnvironmentFile=/etc/default/watchlog\nExecStart=/opt/watchlog.sh \$WORD \$LOG" >> /etc/systemd/system/watchlog.service 
+  - name: Создадим юнит для таймера
+    ansible.builtin.shell: touch /etc/systemd/system/watchlog.timer |
+      echo "[Unit]\nDescription=Run watchlog script every 30 second\n\n[Timer]\nOnActiveSec=5\n# Run every 30 second\nOnUnitActiveSec=5\nUnit=watchlog.service\n\n[Install]\nWantedBy=multi-user.target" >> /etc/systemd/system/watchlog.timer
+  - name: Запускаем timer
+    ansible.builtin.shell: systemctl start watchlog.timer 
+  - name: Убеждаемся в результате
+    ansible.builtin.shell: | 
+      tail -n 1000 /var/log/syslog  | grep I | grep found | grep word | grep Master
+    register: check_tail  
+  - name: Выхлоп результата
+    ansible.builtin.debug: 
+      var: check_tail.stdout_lines
+#2. Установить spawn-fcgi и создать unit-файл (spawn-fcgi.sevice) с помощью переделки init-скрипта
+  - name: Устанавливаем spawn-fcgi и необходимые для него пакеты
+    ansible.builtin.command: apt install spawn-fcgi php php-cgi php-cli \
+      apache2 libapache2-mod-fcgid -y
+  - name: Создаем директорию 
+    ansible.builtin.shell: mkdir /etc/spawn-fcgi  
+  - name: Создаем файл 
+    ansible.builtin.shell: touch /etc/spawn-fcgi/fcgi.conf 
+  - name: Заполняем файл
+    ansible.builtin.shell: echo "SOCKET=/var/run/php-fcgi.sock\nOPTIONS=\"-u www-data -g www-data -s \$SOCKET -S -M 0600 -C 32 -F 1 -- /usr/bin/php-cgi\"" >> /etc/spawn-fcgi/fcgi.conf
+  - name: Создаем Unit
+    ansible.builtin.shell: touch /etc/systemd/system/spawn-fcgi.service |
+      echo "[Unit]\nDescription=Spawn-fcgi startup service by Otus\nAfter=network.target\n\n[Service]\nType=simple\nPIDFile=/var/run/spawn-fcgi.pid\nEnvironmentFile=/etc/spawn-fcgi/fcgi.conf\nExecStart=/usr/bin/spawn-fcgi -n \$OPTIONS\nKillMode=process\n\n[Install]\nWantedBy=multi-user.target" >> /etc/systemd/system/spawn-fcgi.service
+  - name: Запускаем службу
+    ansible.builtin.command: systemctl start spawn-fcgi
+  - name: Убеждаемся в результате
+    ansible.builtin.shell: | 
+      systemctl status spawn-fcgi
+    register: status_spawn
+  - name: Выхлоп результата
+    ansible.builtin.debug: 
+      var: status_spawn.stdout_lines
+# 3. Доработать unit-файл Nginx (nginx.service) для запуска нескольких инстансов сервера с разными конфигурационными файлами одновременно
+  - name: Устанавливаем ngnix
+    ansible.builtin.command: apt install nginx -y
+  - name: Копируем конфиги 
+    ansible.builtin.copy:
+      src: /root/dz-10-systemd/nginx@.service
+      dest: /etc/systemd/system/nginx@.service
+  - name: Копируем 1й конф
+    ansible.builtin.copy:
+      src: /root/dz-10-systemd/nginx-first.conf
+      dest: /etc/nginx/nginx-first.conf
+  - name: Копируем 2й конф
+    ansible.builtin.copy:
+      src: /root/dz-10-systemd/nginx-second.conf
+      dest: /etc/nginx/nginx-second.conf
+  - name: Запускаем сервисы
+    ansible.builtin.shell: |
+      systemctl start nginx@first |
+      systemctl start nginx@second
+  - name: Убеждаемся в результате
+    ansible.builtin.shell: | 
+      ss -tnulp | grep nginx
+    register: status_port_nginx
+  - name: Выхлоп результата
+    ansible.builtin.debug: 
+       var: status_port_nginx.stdout_lines
+      
+    

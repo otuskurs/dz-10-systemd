@@ -1,0 +1,194 @@
+root@ansible:~/dz-10-systemd# ansible-playbook main.yml 
+
+PLAY [all] **********************************************************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38]
+
+TASK [Создаём файл с конфигурацией для сервиса] *********************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Создаём log файл с ключевым словом ALERT] *********************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Создаём скрипт] ***********************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Делаем файл исполняемым] **************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Создадим юнит для сервиса] ************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Создадим юнит для таймера] ************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Запускаем timer] **********************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Убеждаемся в результате] **************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Выхлоп результата] ********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38] => {
+    "check_tail.stdout_lines": [
+        "Aug 12 13:30:15 dz-10-1 root: Mon Aug 12 01:30:15 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:30:15 dz-10-1 root: message repeated 3 times: [ Mon Aug 12 01:30:15 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:30:24 dz-10-1 root: Mon Aug 12 01:30:24 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:30:24 dz-10-1 root: message repeated 3 times: [ Mon Aug 12 01:30:24 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:30:28 dz-10-1 python3[1109]: ansible-ansible.legacy.command Invoked with _raw_params=\"touch /opt/watchlog.sh\" |#012echo \"#!/bin/bash\\n\\nWORD=\\$1\\nLOG=\\$2\\nDATE=\\`date\\`\\n\\nif grep \\$WORD \\$LOG &> /dev/null;\\nthen\\nlogger \\\"\\$DATE: I found word, Master!\\\"\\nelse\\nexit 0\\nfi\" >> /opt/watchlog.sh #012 _uses_shell=True expand_argument_vars=True stdin_add_newline=True strip_empty_ends=True argv=None chdir=None executable=None creates=None removes=None stdin=None",
+        "Aug 12 13:30:29 dz-10-1 root: Mon Aug 12 01:30:29 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:30:29 dz-10-1 root: message repeated 5 times: [ Mon Aug 12 01:30:29 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:31:09 dz-10-1 root: Mon Aug 12 01:31:09 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:31:09 dz-10-1 root: message repeated 5 times: [ Mon Aug 12 01:31:09 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:31:15 dz-10-1 root: Mon Aug 12 01:31:15 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:31:15 dz-10-1 root: message repeated 5 times: [ Mon Aug 12 01:31:15 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:31:29 dz-10-1 root: Mon Aug 12 01:31:29 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:31:29 dz-10-1 root: message repeated 5 times: [ Mon Aug 12 01:31:29 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:32:13 dz-10-1 root: Mon Aug 12 01:32:13 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:32:13 dz-10-1 root: message repeated 5 times: [ Mon Aug 12 01:32:13 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:33:13 dz-10-1 root: Mon Aug 12 01:33:13 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:33:13 dz-10-1 root: message repeated 5 times: [ Mon Aug 12 01:33:13 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:33:48 dz-10-1 root: Mon Aug 12 01:33:48 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:33:48 dz-10-1 root: Mon Aug 12 01:33:48 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:33:48 dz-10-1 root: Mon Aug 12 01:33:48 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:33:48 dz-10-1 root: Mon Aug 12 01:33:48 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:33:48 dz-10-1 root: Mon Aug 12 01:33:48 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:33:48 dz-10-1 root: Mon Aug 12 01:33:48 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:00 dz-10-1 root: Mon Aug 12 01:34:00 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:00 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:34:00 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:34:10 dz-10-1 root: Mon Aug 12 01:34:10 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:10 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:34:10 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:34:15 dz-10-1 root: Mon Aug 12 01:34:15 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:15 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:34:15 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:34:25 dz-10-1 root: Mon Aug 12 01:34:25 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:25 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:34:25 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:34:41 dz-10-1 root: Mon Aug 12 01:34:41 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:41 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:34:41 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:34:47 dz-10-1 root: Mon Aug 12 01:34:47 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:47 dz-10-1 root: Mon Aug 12 01:34:47 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:47 dz-10-1 root: Mon Aug 12 01:34:47 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:47 dz-10-1 root: message repeated 2 times: [ Mon Aug 12 01:34:47 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:34:47 dz-10-1 root: Mon Aug 12 01:34:47 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:34:47 dz-10-1 root: message repeated 3 times: [ Mon Aug 12 01:34:47 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:35:03 dz-10-1 root: Mon Aug 12 01:35:03 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:03 dz-10-1 root: Mon Aug 12 01:35:03 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:03 dz-10-1 root: Mon Aug 12 01:35:03 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:03 dz-10-1 root: message repeated 6 times: [ Mon Aug 12 01:35:03 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:35:09 dz-10-1 root: Mon Aug 12 01:35:09 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:09 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:35:09 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:35:15 dz-10-1 root: Mon Aug 12 01:35:15 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:15 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:35:15 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:35:50 dz-10-1 root: Mon Aug 12 01:35:50 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:50 dz-10-1 root: Mon Aug 12 01:35:50 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:51 dz-10-1 root: Mon Aug 12 01:35:51 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:35:51 dz-10-1 root: message repeated 6 times: [ Mon Aug 12 01:35:51 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:36:00 dz-10-1 root: Mon Aug 12 01:36:00 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:36:00 dz-10-1 root: message repeated 8 times: [ Mon Aug 12 01:36:00 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:36:03 dz-10-1 python3[2643]: ansible-ansible.legacy.command Invoked with _raw_params=\"touch /opt/watchlog.sh\" |#012echo \"#!/bin/bash\\n\\nWORD=\\$1\\nLOG=\\$2\\nDATE=\\`date\\`\\n\\nif grep \\$WORD \\$LOG &> /dev/null;\\nthen\\nlogger \\\"\\$DATE: I found word, Master!\\\"\\nelse\\nexit 0\\nfi\" >> /opt/watchlog.sh #012 _uses_shell=True expand_argument_vars=True stdin_add_newline=True strip_empty_ends=True argv=None chdir=None executable=None creates=None removes=None stdin=None",
+        "Aug 12 13:36:05 dz-10-1 root: Mon Aug 12 01:36:05 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:36:05 dz-10-1 root: message repeated 3 times: [ Mon Aug 12 01:36:05 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:36:05 dz-10-1 root: Mon Aug 12 01:36:05 PM UTC 2024: I found word, Master!",
+        "Aug 12 13:36:05 dz-10-1 root: message repeated 7 times: [ Mon Aug 12 01:36:05 PM UTC 2024: I found word, Master!]",
+        "Aug 12 13:36:05 dz-10-1 python3[2810]: ansible-ansible.legacy.command Invoked with _raw_params=tail -n 1000 /var/log/syslog  | grep I | grep found | grep word | grep Master#012 _uses_shell=True expand_argument_vars=True stdin_add_newline=True strip_empty_ends=True argv=None chdir=None executable=None creates=None removes=None stdin=None"
+    ]
+TASK [Устанавливаем spawn-fcgi и необходимые для него пакеты] *******************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Создаем директорию] *******************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Создаем файл] *************************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Заполняем файл] ***********************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Создаем Unit] *************************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Запускаем службу] *********************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Убеждаемся в результате] **************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Выхлоп результата] ********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38] => {
+    "status_spawn.stdout_lines": [
+        "● spawn-fcgi.service - Spawn-fcgi startup service by Otus",
+        "     Loaded: loaded (/etc/systemd/system/spawn-fcgi.service; disabled; vendor preset: enabled)",
+        "     Active: active (running) since Mon 2024-08-12 14:26:51 UTC; 20h ago",
+        "   Main PID: 16940 (php-cgi)",
+        "      Tasks: 33 (limit: 2219)",
+        "     Memory: 14.1M",
+        "        CPU: 44ms",
+        "     CGroup: /system.slice/spawn-fcgi.service",
+        "             ├─16940 /usr/bin/php-cgi",
+        "             ├─16956 /usr/bin/php-cgi",
+        "             ├─16959 /usr/bin/php-cgi",
+        "             ├─16960 /usr/bin/php-cgi",
+        "             ├─16961 /usr/bin/php-cgi",
+        "             ├─16963 /usr/bin/php-cgi",
+        "             ├─16964 /usr/bin/php-cgi",
+        "             ├─16965 /usr/bin/php-cgi",
+        "             ├─16966 /usr/bin/php-cgi",
+        "             ├─16967 /usr/bin/php-cgi",
+        "             ├─16968 /usr/bin/php-cgi",
+        "             ├─16969 /usr/bin/php-cgi",
+        "             ├─16970 /usr/bin/php-cgi",
+        "             ├─16971 /usr/bin/php-cgi",
+        "             ├─16972 /usr/bin/php-cgi",
+        "             ├─16973 /usr/bin/php-cgi",
+        "             ├─16974 /usr/bin/php-cgi",
+        "             ├─16977 /usr/bin/php-cgi",
+        "             ├─16978 /usr/bin/php-cgi",
+        "             ├─16979 /usr/bin/php-cgi",
+        "             ├─16980 /usr/bin/php-cgi",
+        "             ├─16981 /usr/bin/php-cgi",
+        "             ├─16982 /usr/bin/php-cgi",
+        "             ├─16983 /usr/bin/php-cgi",
+        "             ├─16984 /usr/bin/php-cgi",
+        "             ├─16985 /usr/bin/php-cgi",
+        "             ├─16986 /usr/bin/php-cgi",
+        "             ├─16987 /usr/bin/php-cgi",
+        "             ├─16988 /usr/bin/php-cgi",
+        "             ├─16989 /usr/bin/php-cgi",
+        "             ├─16990 /usr/bin/php-cgi",
+        "             ├─16991 /usr/bin/php-cgi",
+        "             └─16996 /usr/bin/php-cgi",
+        "",
+        "Aug 12 14:26:51 dz-10-1 systemd[1]: Started Spawn-fcgi startup service by Otus."
+    ]
+TASK [Gathering Facts] **********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38]
+
+TASK [Устанавливаем ngnix] ******************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Копируем конфиги] *********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38]
+
+TASK [Копируем 1й конф] *********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38]
+
+TASK [Копируем 2й конф] *********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38]
+
+TASK [Запускаем сервисы] ********************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Убеждаемся в результате] **************************************************************************************************************************************************************************************************
+changed: [192.168.90.38]
+
+TASK [Выхлоп результата] ********************************************************************************************************************************************************************************************************
+ok: [192.168.90.38] => {
+    "status_port_nginx.stdout_lines": [
+        "tcp   LISTEN 0      511                0.0.0.0:9002      0.0.0.0:*    users:((\"nginx\",pid=123897,fd=6),(\"nginx\",pid=123895,fd=6))",
+        "tcp   LISTEN 0      511                0.0.0.0:9001      0.0.0.0:*    users:((\"nginx\",pid=123896,fd=6),(\"nginx\",pid=123894,fd=6))"
+    ]
+}
+
+
+PLAY RECAP **********************************************************************************************************************************************************************************************************************
+192.168.90.38              : ok=25   changed=18    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
